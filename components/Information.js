@@ -5,9 +5,10 @@ import React from 'react'
 function Information() {
   return (
     <View style={styles.container}>
-      <Text>React Native</Text>
-      <Text>By Thanaboon luekajornsak</Text>
-      <Text>Student Id:1913230015 </Text>
+      <Text style = {styles.textStyle}>React Native</Text>
+      <Text style = {{color: "blue",fontSize: 15, fontWeight: "bold"}}
+      >By Thanaboon luekajornsak</Text>
+      <Text style={[styles.textStyle,styles.warning]}>Student Id:1913230015 </Text>
       <Text>Major : MT</Text>
     </View>
   )
@@ -21,5 +22,12 @@ const styles = StyleSheet.create({
       backgroundColor:"#add8e6",
       alignItems:"center",
       justifyContent:'center',
+    },
+    textStyle:{
+      fontSize:20,
+    },
+    warning:{
+      fontWeight:"bold",
+      color:"red",
     }
   })
