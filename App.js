@@ -1,46 +1,41 @@
 import { View, Text, Button } from "react-native";
 import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
   DrawerItem,
+  DrawerItemList,
 } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
 
-import Firstpage from "./pages/Firstpage";
-import Secondpage from "./pages/Secondpage";
-import Thirdpage from "./pages/Thirdpage";
+import HomeScreen from "./screens/HomeScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
-const Stack = createNativeStackNavigator();
-
-const FirstStack = () => {
+function Stack1() {
   return (
     <Stack.Navigator
-      initialRouteName="Firstpage"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Firstpage" component={Firstpage} />
+      <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
     </Stack.Navigator>
   );
-};
-const SecondStack = () => {
+}
+function Stack2() {
   return (
     <Stack.Navigator
-      initialRouteName="Secondpage"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Secondpage" component={Secondpage} />
-      <Stack.Screen name="Thirdpage" component={Thirdpage} />
+      <Stack.Screen name="Setting" component={SettingsScreen}></Stack.Screen>
     </Stack.Navigator>
   );
-};
-
+}
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
@@ -48,36 +43,59 @@ function CustomDrawerContent(props) {
     </DrawerContentScrollView>
   );
 }
+
+const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
+
+function MyTab() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Home") {
+            iconName = focused
+              ? "ios-home"
+              : "ios-home-outline";
+          } else if (route.name === "Settings") {
+            iconName = focused ? "ios-settings" : "ios-settings-outline";
+          }
+          //you can reture any component in here
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "red",
+        tabBarInactiveTintColor: "pink",
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  );
+}
+
 function MyDrawer() {
   return (
     <Drawer.Navigator
       screenOptions={{
         drawerStyle: {
-          backgroundColor: "#b0e0e6",
           width: 240,
         },
+        drawerActiveBackgroundColor: "#BFE6FF",
       }}
       useLegacyImplementation
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen
-        name="Firstpage"
-        component={FirstStack}
-        options={{ title: "First Stack", drawerLabel: "First Page Option" }}
-      />
-      <Drawer.Screen
-        name="Secondpage"
-        component={SecondStack}
-        options={{ title: "Second Stack", drawerLabel: "Second Page Option" }}
-      />
+      <Drawer.Screen name="Home" component={MyTab} />
+      <Drawer.Screen name="Settings" component={Stack2} />
     </Drawer.Navigator>
   );
 }
+
 const App = () => {
   return (
     <NavigationContainer>
-      <MyDrawer />
+      <MyDrawer/>
     </NavigationContainer>
   );
 };
